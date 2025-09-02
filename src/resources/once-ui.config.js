@@ -1,8 +1,8 @@
-const baseURL = "https://docs.once-ui.com";
+const baseURL = "https://api-docs.vercel.app";
 
 const routes = {
-  '/changelog':  true,
-  '/roadmap':    true,
+  '/api-reference':  true,
+  '/sandbox':    true,
 }
 
 // Import and set font for each variant
@@ -139,30 +139,30 @@ const social = [
 const schema = {
   logo: "",
   type: "Organization",
-  name: "Magic Docs",
-  description: "Magic Docs is a simple and beautiful documentation template built with Once UI.",
-  email: "",
-  locale: "en_US"
+  name: "Payment API Docs",
+  description: "Multi-Merchant Payment System API Documentation - Secure payment processing for merchants.",
+  email: "support@payment-system.com",
+  locale: "tr_TR"
 };
 
 const meta = {
   home: {
-    title: `Docs – ${schema.name}`,
+    title: `API Docs – ${schema.name}`,
     description: schema.description,
     path: "/",
-    image: "/api/og/generate?title=Magic Templates&description=Documentation of the official Once UI templates"
+    image: "/api/og/generate?title=Payment API&description=Multi-Merchant Payment System Documentation"
   },
-  roadmap: {
-    title: `Roadmap – ${schema.name}`,
-    description: schema.description,
-    path: "/roadmap",
-    image: "/api/og/generate?title=Roadmap"
+  apiReference: {
+    title: `API Reference – ${schema.name}`,
+    description: "Complete API reference for payment endpoints",
+    path: "/api-reference",
+    image: "/api/og/generate?title=API Reference"
   },
-  changelog: {
-    title: `Changelog – ${schema.name}`,
-    description: schema.description,
-    path: "/changelog",
-    image: "/api/og/generate?title=Changelog"
+  sandbox: {
+    title: `API Sandbox – ${schema.name}`,
+    description: "Test API endpoints with live examples",
+    path: "/sandbox",
+    image: "/api/og/generate?title=API Sandbox"
   }
 };
 

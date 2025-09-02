@@ -6,17 +6,14 @@ import {
   Text, 
   Button, 
   Grid,
-  Media, 
-  Line, 
-  StatusIndicator,
   Badge,
   Tag,
   Meta,
-  Schema
+  Schema,
+  Icon,
+  Card
 } from "@once-ui-system/core";
-import { baseURL, meta, schema, changelog, roadmap, routes } from "@/resources";
-import { formatDate } from "./utils/formatDate";
-import { PageList } from "@/product/PageList";
+import { baseURL, meta, schema, routes } from "@/resources";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -27,41 +24,6 @@ export async function generateMetadata() {
     image: meta.home.image
   });
 }
-
-// Calculate roadmap progress stats
-const calculateRoadmapStats = () => {
-  let totalTasks = 0;
-  let inProgressTasks = 0;
-  let completedTasks = 0;
-  
-  roadmap.forEach(product => {
-    product.columns.forEach(column => {
-      totalTasks += column.tasks.length;
-      
-      if (column.title === "In Progress") {
-        inProgressTasks += column.tasks.length;
-      }
-      
-      if (column.title === "Done") {
-        completedTasks += column.tasks.length;
-      }
-    });
-  });
-  
-  const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-  
-  return {
-    totalTasks,
-    inProgressTasks,
-    completedTasks,
-    progressPercentage
-  };
-};
-
-const roadmapStats = calculateRoadmapStats();
-
-// Get the latest changelog entry
-const latestChangelogEntry = changelog[0];
 
 export default function Home() {
   return (
@@ -87,249 +49,228 @@ export default function Home() {
               paddingRight="16"
               paddingY="4"
               border="neutral-alpha-medium"
-              href="/get-started"
+              href="/api-reference"
               vertical="center"
               marginBottom="12"
             >
-                <Tag marginRight="12">Docs</Tag>
+                <Tag marginRight="12">API</Tag>
                 <Text
                   variant="label-default-s"
                   onBackground="neutral-weak"
                 >
-                  Simple, clean docs site
+                  Güvenli ödeme sistemi
                 </Text>
             </Badge>
             <Heading variant="display-strong-s">
-              Magic Docs
+              Payment API Docs
             </Heading>
             <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
-              Build amazing product documentations without writing a single line of code
+              Multi-merchant ödeme sistemi API dokümantasyonu. Güvenli pay-in ve pay-out işlemleri için kapsamlı rehber.
             </Text>
-            <Button data-border="rounded" size="s" href="/get-started" variant="secondary" arrowIcon id="get-started">Quick start</Button>
+            <Row gap="m">
+              <Button data-border="rounded" size="s" href="/api-reference" variant="secondary" arrowIcon id="api-reference">
+                API Referansı
+              </Button>
+              <Button data-border="rounded" size="s" href="/sandbox" variant="tertiary" arrowIcon id="sandbox">
+                Sandbox Test
+              </Button>
+            </Row>
           </Column>
         </Row>
       </Column>
 
-      <Column fillWidth>
+      {/* API Özellikleri */}
+      <Column fillWidth gap="l">
         <Column fillWidth>
           <Text 
             variant="display-default-s" 
             onBackground="neutral-strong"
           >
-            Products
+            API Özellikleri
           </Text>
           <Text
             onBackground="neutral-weak"
             marginTop="8"
           >
-            Deploy your docs in minutes
+            Güvenli ve ölçeklenebilir ödeme çözümleri
           </Text>
         </Column>
-        <PageList depth={1} thumbnail={true} marginTop="24" minHeight={14}/>
-        <Heading as="h2" variant="display-default-xs" marginTop="48">
-          Components
-        </Heading>
-        <Grid fillWidth columns="2" s={{columns: "1"}} gap="8" marginTop="24">
-          <PageList path={["components"]} description={false}/>
+        
+        <Grid fillWidth columns="2" s={{columns: "1"}} gap="l" marginTop="24">
+          {/* Pay-In */}
+          <Column 
+            padding="l" 
+            radius="l" 
+            border="neutral-alpha-weak" 
+            background="overlay"
+            gap="m"
+          >
+            <Row vertical="center" gap="m">
+              <Icon name="arrowDown" size="l" onBackground="success-strong" />
+              <Column gap="xs">
+                <Heading as="h3" variant="heading-default-m">
+                  Pay-In (Para Yatırma)
+                </Heading>
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  Havale, kredi kartı, dijital cüzdan ve kripto para ile güvenli ödeme alma
+                </Text>
+              </Column>
+            </Row>
+            <Column gap="xs">
+              <Text variant="label-default-s" onBackground="neutral-weak">Desteklenen Yöntemler:</Text>
+              <Row gap="xs" wrap>
+                <Badge>Havale</Badge>
+                <Badge>Kredi Kartı</Badge>
+                <Badge>Papara</Badge>
+                <Badge>Crypto</Badge>
+                <Badge>+7 Daha</Badge>
+              </Row>
+            </Column>
+          </Column>
+
+          {/* Pay-Out */}
+          <Column 
+            padding="l" 
+            radius="l" 
+            border="neutral-alpha-weak" 
+            background="overlay"
+            gap="m"
+          >
+            <Row vertical="center" gap="m">
+              <Icon name="arrowUp" size="l" onBackground="warning-strong" />
+              <Column gap="xs">
+                <Heading as="h3" variant="heading-default-m">
+                  Pay-Out (Para Çekme)
+                </Heading>
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  IBAN, dijital cüzdan ve kripto adreslere hızlı para transferi
+                </Text>
+              </Column>
+            </Row>
+            <Column gap="xs">
+              <Text variant="label-default-s" onBackground="neutral-weak">Transfer Seçenekleri:</Text>
+              <Row gap="xs" wrap>
+                <Badge>IBAN</Badge>
+                <Badge>Papara</Badge>
+                <Badge>USDT</Badge>
+                <Badge>Wallet</Badge>
+              </Row>
+            </Column>
+          </Column>
+
+          {/* Güvenlik */}
+          <Column 
+            padding="l" 
+            radius="l" 
+            border="neutral-alpha-weak" 
+            background="overlay"
+            gap="m"
+          >
+            <Row vertical="center" gap="m">
+              <Icon name="shield" size="l" onBackground="brand-strong" />
+              <Column gap="xs">
+                <Heading as="h3" variant="heading-default-m">
+                  Güvenlik & Authentication
+                </Heading>
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  HMAC-SHA256 imzalama, API key yönetimi ve webhook doğrulama
+                </Text>
+              </Column>
+            </Row>
+            <Column gap="xs">
+              <Text variant="label-default-s" onBackground="neutral-weak">Güvenlik Özellikleri:</Text>
+              <Row gap="xs" wrap>
+                <Badge>HMAC-SHA256</Badge>
+                <Badge>API Keys</Badge>
+                <Badge>Webhooks</Badge>
+                <Badge>Rate Limiting</Badge>
+              </Row>
+            </Column>
+          </Column>
+
+          {/* Multi-Merchant */}
+          <Column 
+            padding="l" 
+            radius="l" 
+            border="neutral-alpha-weak" 
+            background="overlay"
+            gap="m"
+          >
+            <Row vertical="center" gap="m">
+              <Icon name="users" size="l" onBackground="accent-strong" />
+              <Column gap="xs">
+                <Heading as="h3" variant="heading-default-m">
+                  Multi-Merchant Destek
+                </Heading>
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  Birden fazla merchant için ayrı API credentials ve rate limits
+                </Text>
+              </Column>
+            </Row>
+            <Column gap="xs">
+              <Text variant="label-default-s" onBackground="neutral-weak">Merchant Özellikleri:</Text>
+              <Row gap="xs" wrap>
+                <Badge>Ayrı API Keys</Badge>
+                <Badge>Custom Limits</Badge>
+                <Badge>Webhook URLs</Badge>
+              </Row>
+            </Column>
+          </Column>
         </Grid>
       </Column>
-      
-      {/* Latest Update Section */}
-      {routes['/changelog'] && (
-       <Column 
-       maxWidth={56}
-       background="overlay"
-       radius="l"
-       border="neutral-alpha-weak"
-     >
-       <Column paddingX="32" paddingY="24" fillWidth horizontal="between" s={{direction: "column"}} gap="4">
-         <Row fillWidth vertical="center" horizontal="between" gap="16" wrap>
-           <Heading as="h2" variant="display-default-xs">
-             Latest Update
-           </Heading>
-           <Button data-border="rounded" weight="default" variant="secondary" href="/changelog" size="s" suffixIcon="chevronRight">
-             All changes
-           </Button>
-         </Row>
-         <Text variant="label-default-s" onBackground="neutral-weak">
-           {formatDate(latestChangelogEntry.date)}
-         </Text>
-       </Column>
-        
-        <Column fillWidth>
-          {latestChangelogEntry.image && (
-            <Media
-              priority
-              sizes="(max-width: 768px) 100vw, 768px"
-              radius="l"
-              src={latestChangelogEntry.image} 
-              alt={`Illustration for ${latestChangelogEntry.title}`}
-              border="neutral-alpha-weak"
-              aspectRatio="16 / 9"
-            />
-          )}
-          <Column fillWidth gap="4" paddingX="32" paddingY="24">
-            <Heading as="h3">
-              {latestChangelogEntry.title}
-            </Heading>
 
-            {latestChangelogEntry.description && (
-              <Text variant="body-default-m" onBackground="neutral-weak">
-                {latestChangelogEntry.description}
-              </Text>
-            )}
-          </Column>
-        </Column>
-      </Column>
-      )}
-      
-      {/* Roadmap Progress Section */}
+      {/* Test Credentials */}
       <Column 
         maxWidth={56}
         background="overlay"
         radius="l"
         border="neutral-alpha-weak"
+        padding="l"
+        gap="m"
       >
-        <Column paddingX="32" paddingY="24" fillWidth horizontal="between" s={{direction: "column"}} gap="4">
-          <Row fillWidth vertical="center" horizontal="between" gap="16" wrap>
+        <Row fillWidth vertical="center" horizontal="between" gap="16" wrap>
+          <Column gap="xs">
             <Heading as="h2" variant="display-default-xs">
-              Q2 2025 Roadmap
+              Test Credentials
             </Heading>
-            <Button data-border="rounded" weight="default" variant="secondary" href="/roadmap" size="s" suffixIcon="chevronRight">
-            View Roadmap
+            <Text variant="label-default-s" onBackground="neutral-weak">
+              Sandbox ortamında test etmek için kullanabileceğiniz API bilgileri
+            </Text>
+          </Column>
+          <Button data-border="rounded" weight="default" variant="secondary" href="/sandbox" size="s" suffixIcon="chevronRight">
+            Sandboxa Git
           </Button>
-          </Row>
-          <Text variant="label-default-s" onBackground="neutral-weak">
-            Progress and task status
-          </Text>
-        </Column>
-        
-        <Line background="neutral-alpha-weak" />
-        
-        <Row fillWidth padding="32" gap="20" position="relative" s={{direction: "column"}}>
-          <Row fillWidth gap="12">
-            {/* Overall Progress */}
-            <Column fillWidth gap="8" paddingTop="8">
-              <Column fillWidth gap="20">
-                <Column fillWidth horizontal="center" gap="4">
-                  <Text 
-                    variant="display-strong-l" 
-                    onBackground="neutral-strong"
-                  >
-                    {roadmapStats.progressPercentage}%
-                  </Text>
-                  <Text 
-                    align="center"
-                    variant="label-default-s" 
-                    onBackground="neutral-weak"
-                    marginTop="8"
-                  >
-                    Overall progress
-                  </Text>
-                </Column>
-                
-                <Row
-                  height="8"
-                  fillWidth
-                  overflow="hidden"
-                  radius="full"
-                  background="neutral-alpha-weak"
-                  border="neutral-alpha-weak"
-                >
-                  <Row
-                    fillHeight
-                    radius="full"
-                    transition="micro-medium"
-                    solid="brand-strong"
-                    style={{ 
-                    width: `${roadmapStats.progressPercentage}%`,
-                  }} />
-                </Row>
-              </Column>
-              
-              {/* Task Status */}
-              <Grid fillWidth columns="3" s={{columns: "1"}} gap="8" marginTop="24">
-                {/* Planned Tasks */}
-                <Column 
-                  padding="l" 
-                  horizontal="center"
-                  radius="m" 
-                  border="neutral-alpha-weak" 
-                  background="overlay"
-                  gap="s"
-                >
-                  <Text 
-                    variant="display-default-m" 
-                    onBackground="neutral-strong"
-                  >
-                    {roadmapStats.totalTasks - roadmapStats.completedTasks - roadmapStats.inProgressTasks}
-                  </Text>
-                  <Row vertical="center" gap="8">
-                    <StatusIndicator color="blue" />
-                    <Text 
-                      variant="label-default-s" 
-                      onBackground="neutral-weak"
-                    >
-                      Planned
-                    </Text>
-                  </Row>
-                </Column>
-                
-                {/* In Progress Tasks */}
-                <Column 
-                  padding="l" 
-                  horizontal="center"
-                  radius="m" 
-                  border="neutral-alpha-weak" 
-                  background="overlay"
-                  gap="s"
-                >
-                  <Text 
-                    variant="display-default-m" 
-                    onBackground="neutral-strong"
-                  >
-                    {roadmapStats.inProgressTasks}
-                  </Text>
-                  <Row vertical="center" gap="8">
-                    <StatusIndicator color="yellow" />
-                    <Text 
-                      variant="label-default-s" 
-                      onBackground="neutral-weak"
-                    >
-                      In progress
-                    </Text>
-                  </Row>
-                </Column>
-
-                {/* Completed Tasks */}
-                <Column 
-                  padding="l" 
-                  horizontal="center"
-                  radius="m" 
-                  border="neutral-alpha-weak" 
-                  background="overlay"
-                  gap="s"
-                >
-                  <Text 
-                    variant="display-default-m" 
-                    onBackground="neutral-strong"
-                  >
-                    {roadmapStats.completedTasks}
-                  </Text>
-                  <Row vertical="center" gap="8">
-                    <StatusIndicator color="green" />
-                    <Text 
-                      variant="label-default-s" 
-                      onBackground="neutral-weak"
-                    >
-                      Completed
-                    </Text>
-                  </Row>
-                </Column>
-              </Grid>
-            </Column>
-          </Row>
         </Row>
+        
+        <Grid fillWidth columns="2" s={{columns: "1"}} gap="m" marginTop="m">
+          <Column gap="s">
+            <Text variant="label-default-s" onBackground="neutral-strong">Merchant 1 - E-commerce Store</Text>
+            <Column gap="xs" padding="m" background="neutral-alpha-weak" radius="m">
+              <Row horizontal="between">
+                <Text variant="body-default-xs" onBackground="neutral-weak">API Key:</Text>
+                <Text variant="code-default-xs">mk_1a2b3c4d5e6f7g8h9i0j</Text>
+              </Row>
+              <Row horizontal="between">
+                <Text variant="body-default-xs" onBackground="neutral-weak">Merchant ID:</Text>
+                <Text variant="code-default-xs">merchant_001</Text>
+              </Row>
+            </Column>
+          </Column>
+          
+          <Column gap="s">
+            <Text variant="label-default-s" onBackground="neutral-strong">Merchant 2 - Gaming Platform</Text>
+            <Column gap="xs" padding="m" background="neutral-alpha-weak" radius="m">
+              <Row horizontal="between">
+                <Text variant="body-default-xs" onBackground="neutral-weak">API Key:</Text>
+                <Text variant="code-default-xs">mk_9z8y7x6w5v4u3t2s1r0q</Text>
+              </Row>
+              <Row horizontal="between">
+                <Text variant="body-default-xs" onBackground="neutral-weak">Merchant ID:</Text>
+                <Text variant="code-default-xs">merchant_002</Text>
+              </Row>
+            </Column>
+          </Column>
+        </Grid>
       </Column>
     </Column>
   );

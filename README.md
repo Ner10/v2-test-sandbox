@@ -1,87 +1,200 @@
-# Magic Docs
+# Payment API Documentation
 
-Magic Docs by Once UI is a simple, modern, MDX-based documentation system built with Next.js. It automatically generates navigation based on the MDX files in the content directory. It comes with a built-in roadmap and changelog.
+Multi-merchant ödeme sistemi için kapsamlı API dokümantasyonu. Bu proje, dış müşterilerin API'ye entegre olabilmesi için password korumalı bir dokümantasyon sistemi ve sandbox ortamı sağlar.
 
-View the demo [here](https://docs.once-ui.com).
+## Özellikler
 
-![Magic Docs](public/images/cover.jpg)
+- 🔐 **Password Korumalı Erişim**: Güvenli dokümantasyon erişimi
+- 📚 **Kapsamlı API Referansı**: Tüm endpoint'ler, parametreler ve response formatları
+- 🧪 **Canlı Sandbox**: Test keyleri ile gerçek API istekleri gönderme
+- 🎨 **Modern UI**: Once UI sistemi ile güzel ve kullanıcı dostu arayüz
+- 📱 **Responsive Tasarım**: Tüm cihazlarda mükemmel görünüm
+- 🚀 **Vercel Ready**: Tek tıkla deployment
 
-## Getting started
+## Demo Bilgileri
 
-**1. Clone the repository**
+### Giriş Şifresi
 ```
-git clone https://github.com/once-ui-system/magic-docs.git
+PaymentAPI2024!
 ```
 
-**2. Install dependencies**
+### Test Merchant Credentials
+
+**Merchant 1 - E-commerce Store A**
+- Merchant ID: `merchant_001`
+- API Key: `mk_1a2b3c4d5e6f7g8h9i0j`
+- API Secret: `secret_key_merchant_001`
+
+**Merchant 2 - Gaming Platform B**
+- Merchant ID: `merchant_002`
+- API Key: `mk_9z8y7x6w5v4u3t2s1r0q`
+- API Secret: `secret_key_merchant_002`
+
+## API Endpoints
+
+### Pay-In (Para Yatırma)
+```http
+POST /pay-in
 ```
+
+Desteklenen ödeme yöntemleri:
+- Havale, Papel, Papara, Payco, Parazula, Parola
+- Kredi Kartı, Popy, Paratim, QR, Crypto, H2H-Havale
+
+### Pay-Out (Para Çekme)
+```http
+POST /pay-out
+```
+
+Desteklenen transfer yöntemleri:
+- IBAN (Havale)
+- Dijital Cüzdan Numaraları
+- Kripto Para Adresleri (USDT)
+
+### Transaction Status
+```http
+GET /transaction/{transaction_id}
+```
+
+İşlem durumu sorgulama endpoint'i.
+
+## Kurulum
+
+### Gereksinimler
+- Node.js 18+ 
+- npm veya yarn
+
+### Yerel Geliştirme
+
+1. Projeyi klonlayın:
+```bash
+git clone <repository-url>
+cd api-docs-system
+```
+
+2. Bağımlılıkları yükleyin:
+```bash
 npm install
 ```
 
-**3. Run dev server**
-```
+3. Geliştirme sunucusunu başlatın:
+```bash
 npm run dev
 ```
 
-**4. Edit config**
+4. Tarayıcıda `http://localhost:3000` adresini açın.
+
+## Vercel Deployment
+
+### Otomatik Deployment
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/payment-api-docs)
+
+### Manuel Deployment
+
+1. Vercel CLI'yi yükleyin:
+```bash
+npm i -g vercel
 ```
-src/resources/once-ui.config.js
+
+2. Projeyi deploy edin:
+```bash
+vercel
 ```
 
-**5. Create documentation pages**
+3. Production deployment:
+```bash
+vercel --prod
 ```
-Add new .mdx files to src/content/
+
+## Konfigürasyon
+
+### Environment Variables
+
+Vercel dashboard'da aşağıdaki environment variable'ları ayarlayın:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://api.payment-system.com
+NEXT_PUBLIC_APP_NAME=Payment API Docs
+NEXT_PUBLIC_APP_DESCRIPTION=Multi-Merchant Payment System API Documentation
+API_DOCS_PASSWORD=your-secure-password
+NODE_ENV=production
 ```
 
-Read the full documentation [here](https://docs.once-ui.com/magic-docs/quick-start).
+### Özelleştirme
 
-## Features
+- **Tema ve Renkler**: `src/resources/once-ui.config.js`
+- **API Base URL**: Environment variables
+- **Password**: `src/product/RouteGuard.tsx`
+- **Test Credentials**: `src/app/sandbox/page.tsx`
 
-### Once UI
-- All tokens, components & features of [Once UI](https://once-ui.com) available through NPM
+## Güvenlik
 
-### SEO
-- Automatic open-graph and X image generation with next/og
-- Automatic schema and metadata generation based on the content file
+- **Password Protection**: Tüm dokümantasyon sayfaları password ile korunur
+- **Local Storage**: Authentication durumu tarayıcıda saklanır
+- **HTTPS Only**: Production'da sadece HTTPS bağlantıları kabul edilir
+- **Header Security**: Güvenlik header'ları otomatik eklenir
 
-### Pages
-- Roadmap: when enabled, task progress is displayed in the homepage
-- Changelog: when enabled, last changes are displayed in the homepage
+## API Authentication
 
-### Design
-- Responsive layout optimized for all screen sizes
-- Timeless design without heavy animations and motion
-- Endless customization options through [Once UI](https://docs.once-ui.com/once-ui/contexts/themeProvider)
-- Light and dark mode support with system preference detection
+Gerçek API istekleri için HMAC-SHA256 imzalama gereklidir:
 
-### Navigation
-- Organized documentation structure with nested categories
-- Searchable content with command palette (Cmd+K / Ctrl+K)
-- Automatically generated, responsive sidebar
+```javascript
+const method = 'POST';
+const path = '/pay-in';
+const body = JSON.stringify(requestData);
+const timestamp = Math.floor(Date.now() / 1000).toString();
+const nonce = crypto.randomUUID();
 
-Magic Docs was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
+const payload = `${method}|${path}|${body}|${timestamp}|${nonce}`;
+const signature = crypto.createHmac('sha256', API_SECRET)
+  .update(payload)
+  .digest('hex');
+```
 
-## Creators
+## Webhook Doğrulama
 
-Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
+Webhook'ları doğrulamak için:
 
-## Get involved
+```javascript
+const crypto = require('crypto');
 
-- Join the Design Engineers Club on [Discord](https://discord.com/invite/5EyAQ4eNdS) and share your project with us!
-- Deployed your docs? Share it on the [Once UI Hub](https://once-ui.com/hub) too! We feature our favorite apps on our landing page.
+const signature = req.headers['x-webhook-signature'];
+const payload = JSON.stringify(req.body);
 
-## Magic Docs
+const expectedSignature = crypto.createHmac('sha256', WEBHOOK_SECRET)
+  .update(payload)
+  .digest('hex');
 
-This project is built with [Magic Docs](https://once-ui.com/products/magic-docs). Build your own documentation with Magic Docs for free!
+const isValid = crypto.timingSafeEqual(
+  Buffer.from(signature), 
+  Buffer.from(expectedSignature)
+);
+```
 
-## License
+## Destek
 
-Distributed under the CC BY-NC 4.0 License.
-- Attribution is required.
-- Commercial usage is not allowed.
-- You can extend the license to [Dopler CC](https://dopler.app/license) by purchasing a [Once UI Pro](https://once-ui.com/pricing) license.
+Teknik destek için:
+- **Email**: support@payment-system.com
+- **Dokümantasyon**: Bu site
+- **Test Ortamı**: Sandbox sayfası
 
-See `LICENSE.txt` for more information.
+## Lisans
 
-## Deploy with Vercel
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-docs&project-name=magic-docs&repository-name=magic-docs&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-docs&demo-title=Magic%20Docs&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-docs.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-docs%2Fmain%2Fpublic%2Fimages%2Fcover.jpg)
+Bu proje [MIT License](LICENSE) altında lisanslanmıştır.
+
+## Geliştirici Notları
+
+- Next.js 15 ve React 19 kullanılmıştır
+- Once UI component sistemi entegre edilmiştir
+- TypeScript desteği mevcuttur
+- Responsive tasarım için Tailwind CSS kullanılmıştır
+
+## Changelog
+
+### v1.0.0 (2024-01-01)
+- İlk sürüm
+- Password korumalı giriş sistemi
+- Kapsamlı API dokümantasyonu
+- Canlı sandbox ortamı
+- Vercel deployment desteği

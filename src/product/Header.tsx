@@ -83,27 +83,27 @@ export function Header() {
     }
   ];
   
-  if (routes['/changelog']) {
+  if (routes['/api-reference']) {
     navigationKbarItems.push({
-      id: "changelog",
-      name: "Changelog",
+      id: "api-reference",
+      name: "API Reference",
       section: "Navigation",
       shortcut: [],
-      keywords: "changelog, changelog page",
-      href: "/changelog",
-      icon: "changelog",
+      keywords: "api reference, documentation, endpoints",
+      href: "/api-reference",
+      icon: "book",
     });
   }
   
-  if (routes['/roadmap']) {
+  if (routes['/sandbox']) {
     navigationKbarItems.push({
-      id: "roadmap",
-      name: "Roadmap",
+      id: "sandbox",
+      name: "API Sandbox",
       section: "Navigation",
       shortcut: [],
-      keywords: "roadmap, roadmap page",
-      href: "/roadmap",
-      icon: "roadmap",
+      keywords: "sandbox, test, api testing",
+      href: "/sandbox",
+      icon: "play",
     });
   }
 
@@ -179,12 +179,12 @@ export function Header() {
           </Kbar>
           <Row fillWidth horizontal="end" gap="8" data-border="rounded">
             <Row s={{hide: true}}>
-              <Button size="s" variant="secondary" href="https://once-ui.com/products">
-                Start building
+              <Button size="s" variant="secondary" href="/api-reference">
+                API Docs
               </Button>
             </Row>
-            <Button href="https://once-ui.com/auth" size="s">
-              Sign up
+            <Button href="/sandbox" size="s">
+              Sandbox
             </Button>
           </Row>
         </Row>

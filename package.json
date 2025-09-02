@@ -1,6 +1,7 @@
 {
-  "name": "@once-ui-system/docs",
-  "version": "2.0.0",
+  "name": "payment-api-docs",
+  "version": "1.0.0",
+  "description": "Multi-Merchant Payment System API Documentation",
   "scripts": {
     "dev": "next dev",
     "build": "rimraf .next/cache && next build",
